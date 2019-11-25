@@ -1,0 +1,48 @@
+Categoria(cod_cat(PK), descricao)
+
+Secao(cod_secao(PK), nome)
+
+Fabricante(cnpj(PK), nome, razao_social, email, logradouro, numero, complemento, bairro, cidade, estado, cep)
+
+Produto(num_prod(PK), descricao, fabricante(Fabricante.cnpj), unidade_venda, imagem, categoria(Categoria.cod_cat), preco_venda, qtd_estoque, secao(Secao.cod_secao))
+
+RelacaoCategorias(cod_cat_superior(Categoria.cod_cat)(PK), cod_cat_inferior(Categoria.cod_cat)(PK))
+
+Fornecedor(cnpj(PK), razao_social, num_cad, logradouro, numero, complemento, bairro, cidade, estado, cep, email, pessoa_contato)
+
+TelefonesFornecedor(fornecedor(Fornecedor.cnpj)(PK), telefone(PK))
+
+FornecedorProduto(num_prod(Produto.num_prod)(PK), cod_fornecedor(Fornecedor.cnpj)(PK), valor)
+
+Pedido(num_pedido(PK), data_pedido, data_prevista_entrega, data_entrega_efetuada, cod_fornecedor(Fornecedor.cnpj), condicao_pagamento, valor_final, valor_total, devolvido(bool))
+
+ProdutosPedido(num_pedido(Pedido.num_pedido)(PK), num_prod(Produto.num_prod)(PK), quantidade)
+
+Promocao(id(PK), data_inicio, data_fim, nome, descricao)
+
+ProdutosPromocao(id_promocao(Promocao.id)(PK), num_prod(Produto.num_prod)(PK), desconto_cliente_comum, desconto_cliente_diamante, desconto_cliente_ouro, desconto_cliente_prata)
+
+CategoriaCliente(nome(PK), gasto_anual_minimo) -- terá 4 instancias: Diamante, ouro, prata e comum
+
+Cliente(cpf(PK), nome, data_nascimento, profissao, catergoria(CategoriaCliente.nome))
+
+EnderecosCliente(cod_cliente(Cliente.cpf)(PK), logradouro, numero(PK), complemento(PK), bairro, cidade, estado, cep(PK))
+
+TelefonesCliente(cod_cliente(Cliente.cpf)(PK), numero(PK))
+
+Colaborador(cpf(PK), salario, valor_hr_extra, jornada, funcao, gerente(Gerente.colaborador)(pode ser NULL))
+
+Gerente(colaborador(Colaborador.cpf)(PK), nome, logradouro, numero, complemento, bairro, cep, telefone, data_nasc, escolaridade, estado_civil, data_ingresso, formacao_gerencia(bool))
+
+Atendente(colaborador(Colaborador.cpf)(PK), nome, logradouro, numero, complemento, bairro, cep, telefone, data_nasc, escolaridade, estado_civil, padaria(bool), caixa(bool))
+
+Repositor(colaborador(Colaborador.cpf)(PK), nome, logradouro, numero, complemento, bairro, cep, telefone, data_nasc, escolaridade, estado_civil)
+
+Vigia(colaborador(Colaborador.cpf)(PK), nome, curso_seguranca(bool), logradouro, numero, complemento, bairro, cep, telefone, data_nasc, escolaridade, estado_civil)
+
+ResponsabilidadeRepositor(colaborador(Repositor.colaborador)(PK), secao(Secao.cod_secao)(PK))
+
+CarrinhoCompra(num_cupom_fiscal(PK), cliente(Cliente.cpf), operador(Atendente.colaborador), data_compra, horario, valor_total, valor_com_desconto, forma_pagamento)
+
+ProdutosCarrinhoCompra(num_cupom_fiscal(CarrinhoCompra.num_cupom_fiscal)(PK), produto(Procuto.num_prod)(PK), quantidade)
+
